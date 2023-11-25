@@ -12,7 +12,7 @@ using NZWalks.API.Data;
 namespace NZWalks.API.Migrations
 {
     [DbContext(typeof(NZWalksDbContext))]
-    [Migration("20231125140057_Initial")]
+    [Migration("20231125203849_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
