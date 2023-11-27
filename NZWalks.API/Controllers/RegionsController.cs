@@ -42,10 +42,10 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult GetById([FromRoute]Guid id)
+        public IActionResult GetById([FromRoute] Guid id)
         {
             //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
-            var regionDomain=dbContext.Regions.Find(id);
+            var regionDomain = dbContext.Regions.Find(id);
 
             //Find() only for id
 
@@ -91,6 +91,32 @@ namespace NZWalks.API.Controllers
             };
 
             return CreatedAtAction(nameof(GetById), new { Id = regionDTO.Id }, regionDTO);
+        }
+
+        //Update region
+        [HttpPut]
+        [Route("{Id:Guid}")]
+        public IActionResult Update([FromRoute] Guid Id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO)
+        {
+            var regionDomainModel=dbContext.Regions.Find(Id);
+            if (regionDomainModel == null)
+                return NotFound();
+
+            regionDomainModel.Code = updateRegionRequestDTO.Code;
+            regionDomainModel.Name = updateRegionRequestDTO.Name;
+            regionDomainModel.ImageUrl = updateRegionRequestDTO.ImageUrl;
+
+            dbContext.SaveChanges();
+
+            var regionDTO = new Region
+            {
+                Id = regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                Name = regionDomainModel.Name,
+                ImageUrl = regionDomainModel.ImageUrl
+            };
+            //always pass dto to client
+            return Ok(regionDTO);
         }
     }
 }
