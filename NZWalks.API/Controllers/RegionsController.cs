@@ -118,5 +118,19 @@ namespace NZWalks.API.Controllers
             //always pass dto to client
             return Ok(regionDTO);
         }
+
+        [HttpDelete]
+        [Route("{Id:Guid}")]
+
+        public IActionResult Delete([FromRoute] Guid Id)
+        {
+            var regionDomainModel=dbContext.Regions.FirstOrDefault(x => x.Id == Id);
+            if (regionDomainModel == null)
+                return NotFound();
+
+            dbContext.Regions.Remove(regionDomainModel);
+            dbContext.SaveChanges();
+            return Ok();
+        }
     }
 }
