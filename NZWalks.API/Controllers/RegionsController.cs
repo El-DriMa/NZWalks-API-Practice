@@ -18,6 +18,7 @@ namespace NZWalks.API.Controllers
         public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository)
         {
             this.dbContext = dbContext;
+            this.regionRepository = regionRepository;
         }
 
         [HttpGet]
