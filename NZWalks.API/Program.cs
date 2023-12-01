@@ -15,6 +15,7 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnectionString")));
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+builder.Services.AddScoped<IWalksRepository, SQLWalkRepository>();
 
 var app = builder.Build();
 
