@@ -49,7 +49,7 @@ namespace NZWalks.API.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             //var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
-            var regionDomain = await dbContext.Regions.FindAsync(id);
+            var regionDomain = await regionRepository.GetByIdAsync(id);
 
             //Find() only for id
 
@@ -82,9 +82,9 @@ namespace NZWalks.API.Controllers
             };
 
             //use domain model to create region
-            await dbContext.Regions.AddAsync(regionDomainModel);
-            await dbContext.SaveChangesAsync();
 
+             regionDomainModel= await regionRepository.CreateAsync(regionDomainModel);
+           
             //map domain model to DTO
             var regionDTO = new RegionDTO()
             {
@@ -102,7 +102,15 @@ namespace NZWalks.API.Controllers
         [Route("{Id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO)
         {
-            var regionDomainModel=await dbContext.Regions.FindAsync(Id);
+            var regionDomainModel = new Region
+            {
+                Code = updateRegionRequestDTO.Code,
+                Name = updateRegionRequestDTO.Name,
+                ImageUrl = updateRegionRequestDTO.ImageUrl
+            };
+
+            regionDomainModel=await regionRepository.UpdateAsync(Id,regionDomainModel);
+
             if (regionDomainModel == null)
                 return NotFound();
 
@@ -128,12 +136,10 @@ namespace NZWalks.API.Controllers
 
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
         {
-            var regionDomainModel=await dbContext.Regions.FirstOrDefaultAsync(x => x.Id == Id);
+            var regionDomainModel = await regionRepository.DeleteAsync(Id);
             if (regionDomainModel == null)
                 return NotFound();
 
-            dbContext.Regions.Remove(regionDomainModel);
-            await dbContext.SaveChangesAsync();
             return Ok();
         }
     }
