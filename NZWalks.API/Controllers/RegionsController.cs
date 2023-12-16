@@ -120,15 +120,8 @@ namespace NZWalks.API.Controllers
             if (regionDomainModel == null)
                 return NotFound();
 
-            regionDomainModel.Code = updateRegionRequestDTO.Code;
-            regionDomainModel.Name = updateRegionRequestDTO.Name;
-            regionDomainModel.ImageUrl = updateRegionRequestDTO.ImageUrl;
-
-            await dbContext.SaveChangesAsync();
-
-            var regionDTO = mapper.Map<RegionDTO>(regionDomainModel);
             //always pass dto to client
-            return Ok(regionDTO);
+            return Ok(mapper.Map<RegionDTO>(regionDomainModel));
         }
 
         [HttpDelete]
