@@ -29,6 +29,7 @@ namespace NZWalks.API.Controllers
         {
             //domain models
             var regionsDomain = await regionRepository.GetAllAsync();
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
             /*//map domain models to DTOs
             var regionDTOs = new List<RegionDTO>();
@@ -75,6 +76,18 @@ namespace NZWalks.API.Controllers
 
             return Ok(mapper.Map<RegionDTO>(regionDomain));
         }
+        [HttpGet]
+        [Route("{code}")]
+        public async Task<IActionResult> GetByCode([FromRoute] string code)
+        {
+            var domain = await regionRepository.GetByCodeAsync(code);
+
+            if (domain == null)
+                return NotFound();
+
+            return Ok(mapper.Map<RegionDTO>(domain));
+        }
+
 
         //POST to create new region
         [HttpPost]

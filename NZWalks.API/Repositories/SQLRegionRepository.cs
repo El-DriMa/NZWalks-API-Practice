@@ -33,6 +33,11 @@ namespace NZWalks.API.Repositories
             return await dbContext.Regions.ToListAsync();
         }
 
+        public async Task<Region?> GetByCodeAsync(string code)
+        {
+            return await dbContext.Regions.Where(x=>x.Code.ToLower()== code.ToLower()).FirstOrDefaultAsync();
+        }
+
         public async Task<Region>? GetByIdAsync(Guid Id)
         {
             return await dbContext.Regions.FirstOrDefaultAsync(x => x.Id == Id);

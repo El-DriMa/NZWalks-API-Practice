@@ -21,8 +21,18 @@ builder.Services.AddScoped<IDifficultyRepository, SQLDifficultyRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
 
-var app = builder.Build();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://127.0.0.1:5500/") //od js 
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -33,6 +43,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseCors();
 
 app.MapControllers();
 
